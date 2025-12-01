@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Smoke Test — EliteTrend</title>
+  <style>
+    body{font-family: Arial, Roboto, sans-serif; background:#fff; color:#111; padding:24px;}
+    .wrap{max-width:980px;margin:0 auto;}
+    img{max-width:100%;height:auto;display:block;margin-bottom:12px}
+    .hero{border-radius:10px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.06);padding:8px}
+    .cta{display:inline-block;background:linear-gradient(90deg,#ff6a00,#ff3b00);color:#fff;padding:12px 18px;border-radius:12px;font-weight:800;text-decoration:none}
+    .count{display:flex;gap:8px;margin-top:12px}
+    .cd{background:#fff;border:1px solid #eee;padding:10px 12px;border-radius:8px;min-width:64px;text-align:center}
+    .label{font-size:12px;color:#666;margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Test — Images, CTA & Countdown</h2>
+
+    <!-- keep original hero image URL exactly as in your page -->
+    <div class="hero">
+      <img src="https://elitetrend.shop/wp-content/uploads/2025/09/10-1-1024x1024.png" alt="Hero">
+    </div>
+
+    <!-- other original images (examples) -->
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/Blue-and-Orange-Modern-Online-Course-Instagram-Post-1-1-1-819x1024.png" alt="img2">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/The-Ultimate-Package-1-1-1024x576.png" alt="img3">
+
+    <!-- preserved hosted demo video -->
+    <video controls preload="metadata" style="width:100%;max-width:640px;margin-top:10px">
+      <source src="https://elitetrend.shop/wp-content/uploads/2025/09/Indian.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <p style="margin-top:14px">
+      <a class="cta" href="https://tinyurl.com/video-dekho" id="buyBtn">Buy Now & Access Package</a>
+    </p>
+
+    <!-- countdown wrapper uses same class name & data-date this page uses -->
+    <div class="elementor-countdown-wrapper" data-date="1764703140" style="margin-top:18px">
+      <div class="count" aria-live="polite">
+        <div class="cd"><div class="val elementor-countdown-days">--</div><div class="label">Days</div></div>
+        <div class="cd"><div class="val elementor-countdown-hours">--</div><div class="label">Hours</div></div>
+        <div class="cd"><div class="val elementor-countdown-minutes">--</div><div class="label">Minutes</div></div>
+        <div class="cd"><div class="val elementor-countdown-seconds">--</div><div class="label">Seconds</div></div>
+      </div>
+    </div>
+
+    <p style="color:#666;margin-top:18px">If this page loads fine, the problem is in the big/original HTML (likely a JS error or a resource blocking). If this is blank too, the problem is the upload/path/permissions or your host blocking the file.</p>
+  </div>
+
+  <script>
+  (function(){
+    // countdown: uses same logic as I added to your big page
+    function toInt(v){var n=parseInt(v,10);return isNaN(n)?null:n;}
+    var epoch = null;
+    if(window.CUSTOM_COUNTDOWN_DATE && Number(window.CUSTOM_COUNTDOWN_DATE)) epoch = toInt(window.CUSTOM_COUNTDOWN_DATE);
+    var orig = document.querySelector('.elementor-countdown-wrapper');
+    if(!epoch && orig){ var a = orig.getAttribute('data-date'); if(a){ var v = toInt(a); if(v){ if(v>1e12) v = Math.floor(v/1000); epoch = v; } } }
+    if(!epoch) epoch = Math.floor(Date.now()/1000) + 24*3600;
+
+    var daysEl = document.querySelector('.elementor-countdown-days');
+    var hoursEl = document.querySelector('.elementor-countdown-hours');
+    var minsEl = document.querySelector('.elementor-countdown-minutes');
+    var secsEl = document.querySelector('.elementor-countdown-seconds');
+
+    function upd(){ var now=Math.floor(Date.now()/1000); var diff = epoch - now; if(diff<0) diff = 0; var days = Math.floor(diff/86400); var hours = Math.floor((diff%86400)/3600); var mins = Math.floor((diff%3600)/60); var secs = diff%60; if(daysEl) daysEl.textContent = String(days).padStart(2,'0'); if(hoursEl) hoursEl.textContent = String(hours).padStart(2,'0'); if(minsEl) minsEl.textContent = String(mins).padStart(2,'0'); if(secsEl) secsEl.textContent = String(secs).padStart(2,'0'); if(diff<=0) clearInterval(t); }
+    upd(); var t=setInterval(upd,1000);
+  })();
+  </script>
+</body>
+</html>
