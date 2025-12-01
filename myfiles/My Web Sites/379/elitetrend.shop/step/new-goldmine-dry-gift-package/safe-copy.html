@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Safe Copy — EliteTrend Smoke Test</title>
+  <style>
+    body{font-family: Manrope, Arial, sans-serif; background:#fff; color:#111; margin:20px;}
+    .wrap{max-width:1200px;margin:0 auto;}
+    img{max-width:100%;height:auto;display:block;margin:16px 0;border-radius:6px;}
+    .hero{box-shadow:0 10px 30px rgba(0,0,0,0.06);padding:8px;border-radius:8px}
+    .cta{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:12px;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(90deg,#ff6a00,#ff3b00)}
+    .count{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .cd{background:#fff;border:1px solid #eee;padding:10px 14px;border-radius:8px;min-width:70px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+    .label{font-size:12px;color:#666;margin-top:6px}
+    .section-title{font-size:20px;margin:18px 0 6px}
+    video{max-width:100%;height:auto;border-radius:6px}
+    .note{color:#666;font-size:13px;margin-top:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Safe Copy — Smoke Test</h1>
+
+    <!-- HERO (original URL kept) -->
+    <div class="hero">
+      <img src="https://elitetrend.shop/wp-content/uploads/2025/09/10-1-1024x1024.png" alt="Hero image">
+    </div>
+
+    <!-- preserved additional images (kept as absolute URLs) -->
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/Blue-and-Orange-Modern-Online-Course-Instagram-Post-1-1-1-819x1024.png" alt="">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/The-Ultimate-Package-1-1-1024x576.png" alt="">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/All-fruits-in-one-bucket-1-1-1.jpg" alt="">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/All-fruits-in-one-bucket-3-1-1.jpg" alt="">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/All-fruits-in-one-bucket-4-1-1.jpg" alt="">
+    <img src="https://elitetrend.shop/wp-content/uploads/2025/09/All-fruits-in-one-bucket-5.webp" alt="">
+
+    <!-- preserved hosted demo video -->
+    <div class="section-title">Demo Video</div>
+    <video controls preload="metadata">
+      <source src="https://elitetrend.shop/wp-content/uploads/2025/09/Indian.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- CTA (keeps original link) -->
+    <p style="margin-top:18px">
+      <a class="cta" href="https://tinyurl.com/video-dekho" id="buyBtn">Buy Now &amp; Access Package</a>
+    </p>
+
+    <!-- Countdown wrapper uses the same class name & data-date your page uses -->
+    <div class="elementor-countdown-wrapper" data-date="1764703140" style="margin-top:18px">
+      <div class="count" aria-live="polite">
+        <div class="cd"><div class="val elementor-countdown-days">--</div><div class="label">Days</div></div>
+        <div class="cd"><div class="val elementor-countdown-hours">--</div><div class="label">Hours</div></div>
+        <div class="cd"><div class="val elementor-countdown-minutes">--</div><div class="label">Minutes</div></div>
+        <div class="cd"><div class="val elementor-countdown-seconds">--</div><div class="label">Seconds</div></div>
+      </div>
+    </div>
+
+    <p class="note">This test removes all WordPress / Elementor scripts. If this page renders fine, the original white page is caused by a plugin/theme script or broken inline JS in your full page.</p>
+  </div>
+
+  <!-- Defensive countdown script (reads your data-date or window.CUSTOM_COUNTDOWN_DATE) -->
+  <script>
+  (function(){
+    function parseEpoch(src){
+      if(!src) return null;
+      src = String(src).trim();
+      if(/^[0-9]+$/.test(src)){ var n=parseInt(src,10); if(n>1e12) return Math.floor(n/1000); return n; }
+      var d = Date.parse(src);
+      if(!isNaN(d)) return Math.floor(d/1000);
+      return null;
+    }
+    var epoch = null;
+    try { if(window.CUSTOM_COUNTDOWN_DATE) epoch = parseEpoch(window.CUSTOM_COUNTDOWN_DATE); } catch(e){}
+    if(!epoch){
+      var el = document.querySelector('.elementor-countdown-wrapper');
+      if(el){
+        epoch = parseEpoch(el.getAttribute('data-date')) || parseEpoch(el.dataset && el.dataset.date);
+      }
+    }
+    if(!epoch) epoch = Math.floor(Date.now()/1000) + 24*3600;
+    var daysEl = document.querySelector('.elementor-countdown-days');
+    var hoursEl = document.querySelector('.elementor-countdown-hours');
+    var minsEl = document.querySelector('.elementor-countdown-minutes');
+    var secsEl = document.querySelector('.elementor-countdown-seconds');
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tick(){
+      try{
+        var now = Math.floor(Date.now()/1000);
+        var diff = epoch - now; if(diff < 0) diff = 0;
+        var days = Math.floor(diff/86400);
+        var hours = Math.floor((diff%86400)/3600);
+        var mins = Math.floor((diff%3600)/60);
+        var secs = diff%60;
+        if(daysEl) daysEl.textContent = pad(days);
+        if(hoursEl) hoursEl.textContent = pad(hours);
+        if(minsEl) minsEl.textContent = pad(mins);
+        if(secsEl) secsEl.textContent = pad(secs);
+        if(diff===0) clearInterval(t);
+      }catch(err){ console.warn('countdown err', err); }
+    }
+    tick(); var t = setInterval(tick,1000);
+  })();
+  </script>
+</body>
+</html>
